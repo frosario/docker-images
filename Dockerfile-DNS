@@ -1,0 +1,23 @@
+FROM ubuntu:16.04
+
+#Setup
+ENV TERM="xterm"
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
+#Install deb packages
+RUN apt-get update &&\
+    apt-get install -y \
+    dnsmasq \
+    dnsutils \
+    vim \
+    && \
+    apt-get clean all
+
+#Copy config files into image
+COPY DNS/resolv.conf /etc/resolv.conf
+COPY DNS/dnsmasq.conf /etc/dnsmasq.conf 
+
+EXPOSE 53
+EXPOSE 53/udp
+CMD /usr/sbin/dnsmasq -d

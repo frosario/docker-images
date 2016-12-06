@@ -1,0 +1,9 @@
+dns:
+  build: ../
+  dockerfile: ./Dockerfile-DNS
+  container_name: DNS
+  ports:
+    - "53:53"
+    - "53:53/udp"
+  restart: always
+
