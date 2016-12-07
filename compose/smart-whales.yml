@@ -1,13 +1,15 @@
 redis:
-  image: redis
+  build: ../
+  dockerfile: ./Dockerfile-redis
   container_name: redis
   ports:
     - "6379:6379"
   restart: always
 
 mongodb:
+  build: ../
+  dockerfile: ./Dockerfile-mongodb
   container_name: mongodb
-  image: mongodb
   ports:
     - "27017:27017"
   restart: always
