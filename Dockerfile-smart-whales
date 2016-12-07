@@ -1,0 +1,22 @@
+FROM ubuntu:16.04
+
+#Setup
+ENV TERM="xterm"
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
+#Install deb packages
+RUN apt-get update &&\
+    apt-get install -y \
+    vim \
+    python \
+    python-pip \
+    && \
+    apt-get clean all
+
+#Install pip dependencies
+RUN pip install --upgrade pip &&\
+    pip install redis pymongo
+
+COPY smart-whales/example.py /
+
