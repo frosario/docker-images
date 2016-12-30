@@ -1,0 +1,21 @@
+FROM ubuntu:16.04
+
+#Setup
+ENV TERM="xterm"
+RUN rm /bin/sh && ln -s /bin/bash /bin/sh
+RUN echo 'debconf debconf/frontend select Noninteractive' | debconf-set-selections
+
+#Install deb packages
+RUN apt-get update &&\
+    apt-get install -y vim python python-pip add-apt-key openjdk-9-jre wget less &&\
+    wget -q -O - https://pkg.jenkins.io/debian/jenkins-ci.org.key | apt-key add - &&\
+    echo deb http://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list &&\
+    apt-get update &&\
+    apt-get install -y jenkins &&\
+    apt-get clean all
+
+RUN mkdir /var/run/jenkins/
+
+EXPOSE 8080
+
+CMD /usr/bin/java -Djava.awt.headless=true -jar /usr/share/jenkins/jenkins.war --webroot=/var/cache/jenkins/war --httpPort=8080
